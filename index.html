@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<style>
+	body {
+		margin: 0px;
+	}
+
+	canvas { /* float below */
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: -1;
+	}
+</style>
+<canvas id="canvas1"></canvas>
+<input name="mutProb" type="text" maxlength="512" id="mutProb" class="searchField"/>
+<input name="mutVal" type="text" maxlength="512" id="mutVal" class="searchField"/>
+
+<script src="script/cp/cp.js"></script>
+<script src="script/cp/cpVect.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.14.1/dist/tf.js"></script>
+<script src="script/creature.js"></script>
+<script src="script/renderer.js"></script>
+<script src="script/simulation.js"></script>
+<script>
+	var renderer = new Renderer("canvas1", 1920, 1080);
+	var sim = new Simulation(renderer);
+	sim.run();
+</script>
+
+
