@@ -68,6 +68,8 @@ class Simulation {
         this.bestLapTime = Number.MAX_SAFE_INTEGER;
 
         this.eyeTracingCheckBox = document.getElementById('eyeTracing');
+        this.mutationProbabilityEdit = document.getElementById('mutProb');
+        this.mutationChangeEdit = document.getElementById('mutChange');
         
         // var self = this;
         // document.addEventListener('keydown', function(event) {
@@ -246,6 +248,9 @@ class Simulation {
 
     update(dt) {
         this.space.step(1/60);
+
+        let mutationProbability = this.mutationProbabilityEdit.value;
+        let mutationChange = this.mutationChangeEdit.value;
     
         for(let i = 0; i < this.creatures.length; ++i) {
             this.creatures[i].update();
@@ -282,15 +287,15 @@ class Simulation {
             fclone.creatureType = CreatureType.first;
             this.creatures.push(fclone)
     
-            // if(this.generationCount < 6)
-            // {
-            //     this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
-            //     this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
-            // }
+            if(this.generationCount < 6)
+            {
+                this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
+                this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
+            }
     
             let creatures_len = this.creatures.length;
             for(let i = 0; i < NUM_CREATURES - creatures_len; ++i) {
-                let mutationOfFirst = first.clone().mutate(0.08, 1.7);
+                let mutationOfFirst = first.clone().mutate(mutationProbability, mutationChange);
                 mutationOfFirst.creatureType = CreatureType.mutation;
                 this.creatures.push(mutationOfFirst);
             }
@@ -318,7 +323,7 @@ class Simulation {
         for(let i = 0; i < circuitPoints.length; ++i) {
             let p0 = circuitPoints[i][0];
             let p1 = circuitPoints[i][1];
-            this.renderer.drawLine(cp.v(p0[0], p0[1]), cp.v(p1[0], p1[1]), 'grey');
+            this.renderer.drawLine(cp.v(p0[0], p0[1]), cp.v(p1[0], p1[1]), 'grey', 1);
         } 
         
         // for(let i in this.checkpoints)
