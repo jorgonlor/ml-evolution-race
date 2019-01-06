@@ -234,7 +234,6 @@ class Simulation {
                         }
                         creature.lapInitTime = Date.now();
                     } 
-
                     break;              
                 }
                 else
@@ -316,18 +315,18 @@ class Simulation {
             this.renderer.draw(this.static_walls[i]);  
            
         // draw checkpoints
-        //for(let i = 0; i < circuitPoints.length; ++i) {
-            // let p0 = circuitPoints[i][0];
-            // let p1 = circuitPoints[i][1];
-            // this.renderer.drawLine(cp.v(p0[0], p0[1]), cp.v(p1[0], p1[1]));
-        //} 
+        for(let i = 0; i < circuitPoints.length; ++i) {
+            let p0 = circuitPoints[i][0];
+            let p1 = circuitPoints[i][1];
+            this.renderer.drawLine(cp.v(p0[0], p0[1]), cp.v(p1[0], p1[1]), 'grey');
+        } 
         
-        for(let i in this.checkpoints)
-        {
-            for(let j = 0; j < this.checkpoints[i].points.length; ++j) {
-                this.renderer.drawCircle(this.checkpoints[i].points[j], 3);
-            }
-        }
+        // for(let i in this.checkpoints)
+        // {
+        //     for(let j = 0; j < this.checkpoints[i].points.length; ++j) {
+        //         this.renderer.drawCircle(this.checkpoints[i].points[j], 3);
+        //     }
+        // }
 
         //var aaa = document.getElementById('mutProb').value;
 

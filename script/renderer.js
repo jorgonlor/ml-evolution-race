@@ -40,7 +40,9 @@ class Renderer {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    drawLine(a, b) {        
+    drawLine(a, b, color, width) { 
+        this.ctx.strokeStyle = color;
+        this.ctx.lineWidth = width;       
         a = this.point2canvas(a);
         b = this.point2canvas(b);
         this.ctx.beginPath();
@@ -75,7 +77,7 @@ class Renderer {
         cp.SegmentShape.prototype.draw = function (ctx, scale, point2canvas) {
             var oldLineWidth = ctx.lineWidth;
             ctx.lineWidth = Math.max(1, this.r * scale * 2);
-            self.drawLine(this.ta, this.tb);
+            self.drawLine(this.ta, this.tb, 'black', 2);
             ctx.lineWidth = oldLineWidth;
         };
 
@@ -96,7 +98,7 @@ class Renderer {
             if(this.alive && this.showEyeTracing)
             {
                 for(var i = 0; i < this.eyePoints.length; ++i) {
-                    self.drawLine(this.eyePoints[i][0], this.eyePoints[i][1]); 
+                    self.drawLine(this.eyePoints[i][0], this.eyePoints[i][1], 'black', 1); 
                 }
 
                 for(var h = 0; h < this.hitPoints.length; ++h) {
