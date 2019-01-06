@@ -333,6 +333,9 @@ class Simulation {
         if(this.bestLapTime != Number.MAX_SAFE_INTEGER) {
             text += ", Best lap: " + (this.bestLapTime/1000).toFixed(2) + "s";
         }
+        else {
+            text += ", Best lap: N/A";
+        }
         this.renderer.printInfo(text);
     }
 };
