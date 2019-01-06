@@ -66,6 +66,8 @@ class Simulation {
         this.generationBestPrevious = 0;  
 
         this.bestLapTime = Number.MAX_SAFE_INTEGER;
+
+        this.eyeTracingCheckBox = document.getElementById('eyeTracing');
         
         // var self = this;
         // document.addEventListener('keydown', function(event) {
@@ -248,8 +250,8 @@ class Simulation {
     
         for(let i = 0; i < this.creatures.length; ++i) {
             this.creatures[i].update();
-
             this.advanceCheckpoints(this.creatures[i]);
+            this.creatures[i].showEyeTracing = this.eyeTracingCheckBox.checked;
         }
     
         if(this.creatures.every(c => !c.alive)) {

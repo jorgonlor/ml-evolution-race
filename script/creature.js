@@ -73,6 +73,8 @@ class Creature
 		this.checkpointCount = 0;
 
 		this.lapInitTime = Date.now();
+
+		this.showEyeTracing = true;
     }
 
     calculateEyesRotations()

@@ -93,7 +93,7 @@ class Renderer {
             ctx.fillStyle = style;
             this.shape.draw(ctx, scale, point2canvas);
 
-            if(this.alive)
+            if(this.alive && this.showEyeTracing)
             {
                 for(var i = 0; i < this.eyePoints.length; ++i) {
                     self.drawLine(this.eyePoints[i][0], this.eyePoints[i][1]); 
