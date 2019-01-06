@@ -119,7 +119,7 @@ class Creature
 
 		if(this.nextCheckpoint == 0)
 			this.spinCount = 0;
-		if(this.spinCount > 3 || this.spinCount < -3) {
+		if(this.spinCount > 2 || this.spinCount < -2) {
 			this.alive = false;
 			console.log("Death by spinning too much");
 		}
