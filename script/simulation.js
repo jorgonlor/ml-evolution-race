@@ -2,13 +2,6 @@
 
 var WALL_CATEGORY = 1;
 var CREATURE_CATEGORY = 2;
-//var NUM_CREATURES = 18;
-var NUM_CREATURES = 10;
-
-var MUTATION_PROBABILITY = 0.2;
-var MUTATION_CHANGE = 1.7;
-// var MUTATION_PROBABILITY = 0.7;
-// var MUTATION_CHANGE = 0.4;
 
 var circuitPoints = [
  [[530, 228], [534, 108]], 
@@ -17,21 +10,38 @@ var circuitPoints = [
  [[909, 147], [898, 54]], 
  [[1003, 146], [1053, 62]], 
  [[1100, 207], [1250, 183]], 
- [[1112, 298], [1290, 331]], 
- [[1080, 367], [1200, 462]], 
- [[990, 405],  [1034, 536]], 
- [[873, 426],  [888, 565]], 
- [[775, 440],  [781, 558]], 
- [[661, 448],  [630, 560]], 
+ [[1153, 334], [1290, 331]], 
+ [[1144, 453], [1280, 462]], 
+ [[1118, 501], [1188, 589]], 
+ [[1049, 514], [1066, 614]],
+ [[999, 493], [953, 585]],
+ [[978, 445], [879, 519]],
+ [[975, 423], [877, 413]],
+ [[1008, 311], [890, 355]],
+ [[970, 245], [878, 342]],
+
+ [[880, 211], [859, 338]],
+ [[788, 231], [846, 346]],
+ [[725, 324], [804, 377]],
+ [[699, 408], [790, 458]],
+
+ [[679, 433], [745, 525]],
+
+ [[661, 448],  [682, 564]], 
+ [[633, 444], [607, 554]],
+
  [[606, 421],  [551, 523]], 
  [[537, 387],  [485, 485]], 
- [[405, 367],  [430, 480]], 
- [[327, 417],  [373, 516]], 
- [[256, 445],  [282, 558]], 
- [[213, 430],  [133, 505]], 
- [[201, 335],  [62, 344]], 
- [[205, 248],  [64, 197]], 
- [[247, 197],  [159, 85]], 
+ [[409, 399],  [430, 480]], 
+ [[340, 452],  [373, 516]], 
+ [[262, 476],  [282, 558]],
+ [[204, 472], [187, 544]],
+  
+ [[146, 451],  [97, 505]],
+ [[127, 401], [53, 434]], 
+ [[115, 335],  [20, 344]], 
+ [[140, 248],  [48, 206]], 
+ [[233, 197],  [159, 85]], 
  [[310, 183],  [300, 72]], 
  [[413, 227],  [424, 116]]
 ]; 
@@ -55,12 +65,6 @@ class Simulation {
         this.createCircuit(circuitPoints, true);
         this.creaturesInitPosition = this.calculateCircuitInitPosition(circuitPoints);
 
-        // Creatures
-        this.creatures = [];
-        for(var i = 0; i < NUM_CREATURES; ++i) {
-            this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
-        }
-
         this.generationCount = 0;
         this.generationBest = 0;
         this.generationBestPrevious = 0;  
@@ -70,6 +74,13 @@ class Simulation {
         this.eyeTracingCheckBox = document.getElementById('eyeTracing');
         this.mutationProbabilityEdit = document.getElementById('mutProb');
         this.mutationChangeEdit = document.getElementById('mutChange');
+        this.numCreaturesEdit = document.getElementById('numCreatures');
+
+        // Creatures
+        this.creatures = [];
+        for(var i = 0; i < this.numCreaturesEdit.value; ++i) {
+            this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
+        }
         
         // var self = this;
         // document.addEventListener('keydown', function(event) {
@@ -221,8 +232,7 @@ class Simulation {
             let nextCheckpoint = this.checkpoints[creature.nextCheckpoint].points;
             for(let i = 0; i < nextCheckpoint.length; ++i) {
                 if(creature.testFastPointInShape(nextCheckpoint[i]))
-                {
-                    console.log("Checkpoint reached " + creature.nextCheckpoint);
+                {                    
                     ++creature.nextCheckpoint;
                     creature.nextCheckpoint = creature.nextCheckpoint % Object.keys(this.checkpoints).length;   
                     ++creature.checkpointCount;   
@@ -251,6 +261,7 @@ class Simulation {
 
         let mutationProbability = this.mutationProbabilityEdit.value;
         let mutationChange = this.mutationChangeEdit.value;
+        let numCreatures = this.numCreaturesEdit.value;
     
         for(let i = 0; i < this.creatures.length; ++i) {
             this.creatures[i].update();
@@ -266,7 +277,8 @@ class Simulation {
             }
             
             this.creatures.sort((c1, c2) => c2.fitness(this.checkpoints) - c1.fitness(this.checkpoints));
-            var survivors = this.creatures.slice(0, Math.min(4, this.creatures.length));
+            let numSurvivors = Math.floor(numCreatures / 5);
+            var survivors = this.creatures.slice(0, numSurvivors);
             var first = survivors[0];
             this.creatures = [];
             
@@ -274,6 +286,7 @@ class Simulation {
             this.generationBest = first.fitness(this.checkpoints);
             console.log("Generation best: " + this.generationBest);
     
+            // crosses
             for(let i = 0; i < survivors.length - 1; ++i) {
                 for(let j = i + 1; j < survivors.length; ++j) {
                     let cc = survivors[i].clone();
@@ -283,27 +296,31 @@ class Simulation {
                 }
             }
     
+            // clone first
             let fclone = first.clone()
             fclone.creatureType = CreatureType.first;
             this.creatures.push(fclone)
-    
-            if(this.generationCount < 6)
-            {
-                this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
-                this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
+
+            // fine mutations
+            let numFimeMutations = numCreatures >= 10 ? 2 : 1;
+            for(let i = 0; i < numFimeMutations; ++i) {
+                let mutationOfFirst = first.clone().mutate(0.85, 0.05);
+                mutationOfFirst.creatureType = CreatureType.new;
+                this.creatures.push(mutationOfFirst);
             }
     
+            // coarse mutations
             let creatures_len = this.creatures.length;
-            for(let i = 0; i < NUM_CREATURES - creatures_len; ++i) {
+            for(let i = 0; i < numCreatures - creatures_len; ++i) {
                 let mutationOfFirst = first.clone().mutate(mutationProbability, mutationChange);
                 mutationOfFirst.creatureType = CreatureType.mutation;
                 this.creatures.push(mutationOfFirst);
             }
-    
-            for(let i = 0; i < 2; ++i) {
-                let mutationOfFirst = first.clone().mutate(0.85, 0.05);
-                mutationOfFirst.creatureType = CreatureType.new;
-                this.creatures.push(mutationOfFirst);
+
+            if(this.generationCount < 6)
+            {
+                this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
+                this.creatures.push(new Creature(this.space, this.creaturesInitPosition, CREATURE_CATEGORY, CreatureType.new));
             }
     
             ++this.generationCount;
