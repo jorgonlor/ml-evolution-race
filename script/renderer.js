@@ -60,8 +60,8 @@ class Renderer {
     }
 
     printInfo(text) {
-        this.ctx.font = "30px Comic Sans MS";
-        this.ctx.fillStyle = "red";
+        this.ctx.font = "30px Helvetica";
+        this.ctx.fillStyle = "cornflowerblue";
         this.ctx.textAlign = "left";
         let textPos = this.point2canvas(cp.v(20,20));
         this.ctx.fillText(text, textPos.x, textPos.y); 

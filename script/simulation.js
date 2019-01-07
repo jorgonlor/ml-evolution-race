@@ -2,6 +2,7 @@
 
 var WALL_CATEGORY = 1;
 var CREATURE_CATEGORY = 2;
+var TIME_TO_LIVE = 90;
 
 var circuitPoints = [
  [[530, 228], [534, 108]], 
@@ -68,6 +69,7 @@ class Simulation {
         this.generationCount = 0;
         this.generationBest = 0;
         this.generationBestPrevious = 0;  
+        this.generationStartTime = Date.now();
 
         this.bestLapTime = Number.MAX_SAFE_INTEGER;
 
@@ -262,6 +264,7 @@ class Simulation {
     }
 
     update(dt) {
+        let now = Date.now();
         this.space.step(1/60);
 
         let mutationProbability = this.mutationProbabilityEdit.value;
@@ -273,6 +276,11 @@ class Simulation {
             this.advanceCheckpoints(this.creatures[i]);
             this.creatures[i].showEyeTracing = this.eyeTracingCheckBox.checked;
         }
+
+        // if(now - this.generationStartTime > TIME_TO_LIVE) {
+        //     this.creatures.forEach(c => c.alive = false);
+        //     
+        // }
     
         if(this.creatures.every(c => !c.alive)) {
     
@@ -329,6 +337,7 @@ class Simulation {
             }
     
             ++this.generationCount;
+            this.generationStartTime = now;
         }
     }
 
@@ -355,15 +364,12 @@ class Simulation {
         //     }
         // }
 
-        //var aaa = document.getElementById('mutProb').value;
-
-        let text = "Generation: " + this.generationCount + ", Best: " + this.generationBest.toFixed(2) + ", Previous: " + this.generationBestPrevious.toFixed(2);
-        if(this.bestLapTime != Number.MAX_SAFE_INTEGER) {
-            text += ", Best lap: " + (this.bestLapTime/1000).toFixed(2) + "s";
-        }
-        else {
-            text += ", Best lap: N/A";
-        }
+        let text = "Generation: " + this.generationCount;
+        text += "   Best: " + this.generationBest.toFixed(2);
+        text += "   Previous: " + this.generationBestPrevious.toFixed(2);
+        text += "   Remaining gen time: " + Math.floor((TIME_TO_LIVE * 1000 - (Date.now() - this.generationStartTime)) / 1000);
+        text += "   Best lap: " + ((this.bestLapTime != Number.MAX_SAFE_INTEGER) ? ((this.bestLapTime/1000).toFixed(2) + "s") : "N/A");        
+        
         this.renderer.printInfo(text);
     }
 };
