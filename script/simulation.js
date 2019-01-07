@@ -77,6 +77,7 @@ class Simulation {
         this.numCreaturesEdit = document.getElementById('numCreatures');
         this.deadOnCollisionCheckBox = document.getElementById('deadOnCollision');
         this.propulsionMultiplierEdit = document.getElementById('propMult');
+        this.useTanhEdit = document.getElementById('useTanh');
 
         // Creatures
         this.creatures = [];

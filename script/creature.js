@@ -153,7 +153,10 @@ class Creature
 		let vel = vlength(this.body.getVel()) / 100;
 		
         var model_output = tf.tidy(()=> {
-			return tf.tanh(this.brain.predict(tf.tensor2d([eye_signals])));
+			if(self.sim.useTanhEdit.checked)
+				return tf.tanh(this.brain.predict(tf.tensor2d([eye_signals])));
+			else
+				return this.brain.predict(tf.tensor2d([eye_signals]));			
 			//return this.brain.predict(tf.tensor2d([eye_signals.concat([vel])]));
 		});
 		
