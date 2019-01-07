@@ -95,6 +95,7 @@ class Renderer {
             ctx.fillStyle = style;
             this.shape.draw(ctx, scale, point2canvas);
 
+            // eye traces and wall hits
             if(this.alive && this.showEyeTracing)
             {
                 for(var i = 0; i < this.eyePoints.length; ++i) {
@@ -106,6 +107,11 @@ class Renderer {
                     self.drawCircle(this.hitPoints[h], 3);
                 }
             }
+
+            // orientation line
+            let p_near = this.body.p;
+            let p_far = vadd(this.body.p, vmult(this.body.rot, this.radius));
+            self.drawLine(p_near, p_far, 'black', 1);
         }
 
         cp.CircleShape.prototype.draw = function (ctx, scale, point2canvas) {
