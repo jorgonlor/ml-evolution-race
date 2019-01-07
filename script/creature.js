@@ -160,7 +160,7 @@ class Creature
         var thrust_control = model_output.get(0,0);
         var turn_control = model_output.get(0,1);
 
-        this.body.applyImpulse( vmult(this.shape.body.rot, 10 * thrust_control), cp.v(0, 0));
+        this.body.applyImpulse( vmult(this.shape.body.rot, 10 * thrust_control * self.sim.propulsionMultiplierEdit.value), cp.v(0, 0));
 
         this.body.applyImpulse( vmult(cp.v(-3, 0), turn_control), cp.v(0, 1));
 		this.body.applyImpulse( vmult(cp.v(3, 0), turn_control), cp.v(0, -1));

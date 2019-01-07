@@ -75,7 +75,8 @@ class Simulation {
         this.mutationProbabilityEdit = document.getElementById('mutProb');
         this.mutationChangeEdit = document.getElementById('mutChange');
         this.numCreaturesEdit = document.getElementById('numCreatures');
-        this.deadOnCollisionEdit = document.getElementById('deadOnCollision');
+        this.deadOnCollisionCheckBox = document.getElementById('deadOnCollision');
+        this.propulsionMultiplierEdit = document.getElementById('propMult');
 
         // Creatures
         this.creatures = [];
@@ -202,7 +203,7 @@ class Simulation {
     }
 
     handleCreatureWallCollision(arb, space) {
-        if(self.sim.deadOnCollisionEdit.checked) {
+        if(self.sim.deadOnCollisionCheckBox.checked) {
             var c = arb.a.collision_type == CREATURE_CATEGORY ? arb.a : arb.b;
             c.creature.alive = false;
         }
