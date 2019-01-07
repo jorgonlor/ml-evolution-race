@@ -299,14 +299,14 @@ class Simulation {
                 this.space.removeBody(this.creatures[i].body);
             }
             
-            this.creatures.sort((c1, c2) => c2.fitness(this.checkpoints) - c1.fitness(this.checkpoints));
+            this.creatures.sort((c1, c2) => c2.fitness() - c1.fitness());
             let numSurvivors = Math.floor(numCreatures / 5);
             var survivors = this.creatures.slice(0, numSurvivors);
             var first = survivors[0];
             this.creatures = [];
             
             this.generationBestPrevious = this.generationBest;
-            this.generationBest = first.fitness(this.checkpoints);
+            this.generationBest = first.fitness();
             console.log("Generation best: " + this.generationBest);
     
             // crosses

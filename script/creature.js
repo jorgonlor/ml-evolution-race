@@ -58,9 +58,9 @@ class Creature
 		this.hitPoints = [];
 		this.eyePoints = [];
         this.alive = true;
-        this.creationTime = Date.now();
+
         this.timeWhenMax = Date.now();
-		this.max_y = 0.0;
+		this.maxFitness = 0.0;
 		
 		this.debugTime = Date.now();
 
@@ -70,10 +70,9 @@ class Creature
 
 		this.nextCheckpoint = 1;
 		this.checkpointCount = 0;
-
 		this.lapInitTime = Date.now();
-
 		this.showEyeTracing = true;
+		this.updateCycle = 0;
     }
 
     calculateEyesRotations()
@@ -97,15 +96,18 @@ class Creature
         var p = this.shape.body.p;
         var now = Date.now();
 
-        // if(p.y > this.max_y * 1.02) {
-        //     this.max_y = p.y;
-        //     this.timeWhenMax = now;
-        // }
+		if(this.updateCycle % 20 == 0) {
+			let f = this.fitness();
+			if(f > this.maxFitness * 1.02) {
+				this.maxFitness = f;
+				this.timeWhenMax = now;
+			}
+		}
 
-        // if(now - this.timeWhenMax > MAX_TIME_WITHOUT_IMPROVING * 1000) {
-        //     this.alive = false;
-        //     console.log("Death by not improving");
-		// }
+        if(now - this.timeWhenMax > MAX_TIME_WITHOUT_IMPROVING * 1000) {
+            this.alive = false;
+            console.log("Death by not improving");
+		}
 
 		var new_angle = cp.v.toangle(this.body.rot);
 		if(new_angle > this.initAngle && new_angle < this.initAngle + 0.2 && this.angle < this.initAngle && this.angle > this.initAngle - 0.2)
@@ -166,6 +168,10 @@ class Creature
 			this.debugTime = now;
 			console.log("Thrust: " + thrust_control + ", Turn: " + turn_control);			
 		}
+
+		++this.updateCycle;
+		if(this.updateCycle >= 10000000)
+			this.updateCycle = 0;
     }
     
     clone() {
@@ -243,10 +249,9 @@ class Creature
 		return this;
     }
 
-    fitness(checkpoints) {
-		//return this.max_y;
-
-		// Fitness is crossed checkpoints plus how close to next one normalized to (0-1)
+    fitness() {
+		// Fitness is number of crossed checkpoints plus how close to next one is, normalized to [0,1]
+		let checkpoints = self.sim.checkpoints;
 		let cpCount = this.checkpointCount;
 
 		let p = this.body.p;
