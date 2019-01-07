@@ -2,7 +2,6 @@
 
 var WALL_CATEGORY = 1;
 var CREATURE_CATEGORY = 2;
-var TIME_TO_LIVE = 90;
 
 var circuitPoints = [
  [[530, 228], [534, 108]], 
@@ -78,8 +77,12 @@ class Simulation {
         this.mutationChangeEdit = document.getElementById('mutChange');
         this.numCreaturesEdit = document.getElementById('numCreatures');
         this.deadOnCollisionCheckBox = document.getElementById('deadOnCollision');
+        this.deadByOldCheckBox = document.getElementById('deadByOld');
         this.propulsionMultiplierEdit = document.getElementById('propMult');
         this.useTanhEdit = document.getElementById('useTanh');
+        this.generationTimeToLiveEdit = document.getElementById('genTTL');
+
+        this.generationTimeToLive = this.generationTimeToLiveEdit.value;
 
         // Creatures
         this.creatures = [];
@@ -277,10 +280,17 @@ class Simulation {
             this.creatures[i].showEyeTracing = this.eyeTracingCheckBox.checked;
         }
 
-        // if(now - this.generationStartTime > TIME_TO_LIVE) {
-        //     this.creatures.forEach(c => c.alive = false);
-        //     
-        // }
+        if(!this.deadByOldCheckBox.checked)
+            this.generationStartTime = now;
+
+        if(now - this.generationStartTime > this.generationTimeToLive * 1000) {
+            this.creatures.forEach(c => {
+                if(c.alive) {
+                    c.alive = false;
+                    console.log("Death by old age");
+                }
+            });            
+        }
     
         if(this.creatures.every(c => !c.alive)) {
     
@@ -338,6 +348,7 @@ class Simulation {
     
             ++this.generationCount;
             this.generationStartTime = now;
+            this.generationTimeToLive = this.generationTimeToLiveEdit.value;
         }
     }
 
@@ -365,9 +376,9 @@ class Simulation {
         // }
 
         let text = "Generation: " + this.generationCount;
-        text += "   Best: " + this.generationBest.toFixed(2);
+        text += "   Last: " + this.generationBest.toFixed(2);
         text += "   Previous: " + this.generationBestPrevious.toFixed(2);
-        text += "   Remaining gen time: " + Math.floor((TIME_TO_LIVE * 1000 - (Date.now() - this.generationStartTime)) / 1000);
+        text += "   Remaining gen time: " + (this.deadByOldCheckBox.checked ? Math.floor((this.generationTimeToLive * 1000 - (Date.now() - this.generationStartTime)) / 1000) : "--");
         text += "   Best lap: " + ((this.bestLapTime != Number.MAX_SAFE_INTEGER) ? ((this.bestLapTime/1000).toFixed(2) + "s") : "N/A");        
         
         this.renderer.printInfo(text);

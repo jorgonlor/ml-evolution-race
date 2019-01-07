@@ -1,6 +1,5 @@
 "use strict";
 
-var TIME_TO_LIVE = 90;
 var MAX_TIME_WITHOUT_IMPROVING = 12;
 
 var BIAS_MUTATION_PROBABILITY = 0.05;
@@ -102,11 +101,6 @@ class Creature
         //     this.max_y = p.y;
         //     this.timeWhenMax = now;
         // }
-
-        if(!MANUAL_CONTROL && now - this.creationTime > TIME_TO_LIVE * 1000) {
-            this.alive = false;
-            console.log("Death by old age");
-        }
 
         // if(now - this.timeWhenMax > MAX_TIME_WITHOUT_IMPROVING * 1000) {
         //     this.alive = false;
