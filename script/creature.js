@@ -11,6 +11,7 @@ var MANUAL_CONTROL = false;
 
 var CreatureType = {"first":1, "clone":2, "cross":3, "mutation":4, "new":5};
 
+
 class Creature
 {
     constructor(space, position, category, creatureType)
@@ -59,10 +60,10 @@ class Creature
 		this.eyePoints = [];
         this.alive = true;
 
-        this.timeWhenMax = Date.now();
-		this.maxFitness = 0.0;
-		
-		this.debugTime = Date.now();
+		this.lapInitTime = self.now;
+		this.debugTime = self.now;
+        this.timeWhenMax = self.now;
+		this.maxFitness = 0.0;	
 
 		this.angle = cp.v.toangle(this.body.rot);
 		this.initAngle = this.angle;
@@ -70,7 +71,7 @@ class Creature
 
 		this.nextCheckpoint = 1;
 		this.checkpointCount = 0;
-		this.lapInitTime = Date.now();
+		
 		this.showEyeTracing = true;
 		this.updateCycle = 0;
     }
@@ -94,7 +95,7 @@ class Creature
 			return;
 
         var p = this.shape.body.p;
-        var now = Date.now();
+        var now = self.now;
 
 		if(this.updateCycle % 20 == 0) {
 			let f = this.fitness();

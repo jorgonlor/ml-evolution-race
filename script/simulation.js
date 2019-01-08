@@ -46,11 +46,12 @@ var circuitPoints = [
  [[413, 227],  [424, 116]]
 ]; 
 
+var now = 1;
+
 class Simulation {
 
     constructor(renderer) {
         this.space = new cp.Space();
-
         this.renderer = renderer;
 
         //Configure space
@@ -68,7 +69,7 @@ class Simulation {
         this.generationCount = 0;
         this.generationBest = 0;
         this.generationBestPrevious = 0;  
-        this.generationStartTime = Date.now();
+        this.generationStartTime = self.now;
 
         this.bestLapTime = Number.MAX_SAFE_INTEGER;
 
@@ -118,6 +119,7 @@ class Simulation {
         //     }
         // });
     }
+
 
     createCircuit(circuitPoints, loop) {
         var self = this;
@@ -250,11 +252,11 @@ class Simulation {
 
                     // if completed a lap
                     if(creature.nextCheckpoint == 1) {
-                        let lapTime = Date.now() - creature.lapInitTime;
+                        let lapTime = self.now - creature.lapInitTime;
                         if(lapTime < this.bestLapTime) {
                             this.bestLapTime = lapTime;
                         }
-                        creature.lapInitTime = Date.now();
+                        creature.lapInitTime = self.now;
                     } 
                     break;              
                 }
@@ -267,8 +269,9 @@ class Simulation {
     }
 
     update(dt) {
-        let now = Date.now();
+        let now = self.now;
         this.space.step(1/60);
+        self.now += 1000/60;
 
         let mutationProbability = this.mutationProbabilityEdit.value;
         let mutationChange = this.mutationChangeEdit.value;
@@ -378,7 +381,7 @@ class Simulation {
         let text = "Generation: " + this.generationCount;
         text += "   Last: " + this.generationBest.toFixed(2);
         text += "   Previous: " + this.generationBestPrevious.toFixed(2);
-        text += "   Remaining gen time: " + (this.deadByOldCheckBox.checked ? Math.floor((this.generationTimeToLive * 1000 - (Date.now() - this.generationStartTime)) / 1000) : "--");
+        text += "   Remaining gen time: " + (this.deadByOldCheckBox.checked ? (Math.floor((this.generationTimeToLive * 1000 - (self.now - this.generationStartTime)) / 1000) + "s") : "--");
         text += "   Best lap: " + ((this.bestLapTime != Number.MAX_SAFE_INTEGER) ? ((this.bestLapTime/1000).toFixed(2) + "s") : "N/A");        
         
         this.renderer.printInfo(text);
