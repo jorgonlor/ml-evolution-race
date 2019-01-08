@@ -328,7 +328,7 @@ class Simulation {
             let numFimeMutations = numCreatures >= 10 ? 2 : 1;
             for(let i = 0; i < numFimeMutations; ++i) {
                 let mutationOfFirst = first.clone().mutate(0.85, 0.05);
-                mutationOfFirst.creatureType = CreatureType.new;
+                mutationOfFirst.creatureType = CreatureType.fineMutation;
                 this.creatures.push(mutationOfFirst);
             }
     

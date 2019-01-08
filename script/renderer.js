@@ -89,6 +89,7 @@ class Renderer {
                 case CreatureType.clone: style = "green"; break;
                 case CreatureType.cross: style = "grey"; break;
                 case CreatureType.mutation: style = "yellow"; break;
+                case CreatureType.fineMutation: style = "green"; break;
                 case CreatureType.new: style = "black"; break;
             }
 
