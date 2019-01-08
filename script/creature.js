@@ -44,7 +44,7 @@ class Creature
         this.body = space.addBody(new cp.Body(mass, cp.momentForCircle(mass, 0, this.radius, cp.v(0, 0))));        
         this.shape = space.addShape(new cp.CircleShape(this.body, this.radius, cp.v(0, 0)));
         this.shape.setElasticity(0.8);
-        this.shape.setFriction(1);
+        this.shape.setFriction(0.1);
         this.shape.setCollisionType(category);
         //this.shape.setLayers(CREATURE_CATEGORY);
         this.shape.group = category;
