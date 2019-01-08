@@ -1,3 +1,11 @@
+/* 
+ * renderer.js
+ * Created by Jorge Gonzalez, December, 20, 2018.
+ * Released under MIT License - see LICENSE file for details.
+ */
+
+"use strict";
+
 class Renderer {
     constructor(canvas_id, width, height) {
         this.canvas = document.getElementById(canvas_id);

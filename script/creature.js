@@ -1,3 +1,9 @@
+/* 
+ * creature.js
+ * Created by Jorge Gonzalez, December, 20, 2018.
+ * Released under MIT License - see LICENSE file for details.
+ */
+
 "use strict";
 
 var MAX_TIME_WITHOUT_IMPROVING = 12;
@@ -17,15 +23,6 @@ class Creature
     constructor(space, position, category, creatureType)
     {
 		let initializer = 'glorotNormal';
-
-		// this.brain = tf.tidy(() => {
-		// 	return tf.sequential({
-		// 		layers: [
-		// 		tf.layers.dense({units: 8, inputShape: [5], kernelInitializer: initializer, biasInitializer: initializer}),
-		// 		tf.layers.leakyReLU({units: 8, kernelInitializer: initializer, biasInitializer: initializer}),
-		// 		tf.layers.dense({units: 2, /*activation: 'tanh',*/ kernelInitializer: initializer, biasInitializer: initializer})]
-		// 	});
-		// });
 
 		this.brain = tf.tidy(() => {
 			return tf.sequential({
@@ -230,7 +227,6 @@ class Creature
 			var weights = this.brain.layers[i].getWeights()[0].dataSync();
 			for(let j = 0; j < weights.length; ++j) {
 				if(Math.random() < mutationProbability) {
-				//if(Math.random() > 0.7) {
 					weights[j] += Math.random() * mutationChange - (mutationChange / 2.0);
 					// if(weights[j] > 1.3) weights[j] = 1.3;
 					// if(weights[j] < -1.3) weights[j] = -1.3;
@@ -240,7 +236,6 @@ class Creature
 			var bias = this.brain.layers[i].getWeights()[1].dataSync();
 			for(let j = 0; j < bias.length; ++j) {
 				if(Math.random() < BIAS_MUTATION_PROBABILITY) {
-				//if(Math.random() >0.95) {
 					bias[j] += Math.random() * BIAS_MUTATION_CHANGE - (BIAS_MUTATION_CHANGE / 2.0);
 					// if(bias[j] > 1.3) bias[j] = 1.3;
 					// if(bias[j] < -1.3) bias[j] = -1.3;

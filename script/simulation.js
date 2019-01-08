@@ -1,3 +1,9 @@
+/* 
+ * simulation.js
+ * Created by Jorge Gonzalez, December, 20, 2018.
+ * Released under MIT License - see LICENSE file for details.
+ */
+
 "use strict";
 
 var WALL_CATEGORY = 1;
