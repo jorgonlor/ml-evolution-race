@@ -1,6 +1,6 @@
 /* 
  * simulation.js
- * Created by Jorge Gonzalez, December, 20, 2018.
+ * Created by Jorge Gonzalez, jorgonlor@gmail.com, December, 20, 2018.
  * Released under MIT License - see LICENSE file for details.
  */
 
@@ -35,20 +35,16 @@ var circuitPoints = [
  [[615, 416],  [558, 503]],  
  [[603, 370],  [528, 438]],
  [[566, 315],  [479, 372]], 
-
  [[450, 266], [455, 363]], 
  [[349, 315], [411, 372]], 
  [[308, 392], [374, 418]], 
-
  [[287, 439],  [330, 490]], 
  [[257, 470],  [278, 525]],
  [[204, 472], [187, 530]], 
-
  [[126, 451],  [97, 495]],
  [[90, 401], [53, 434]], 
  [[73, 335],  [20, 344]], 
  [[95, 248],  [48, 206]], 
-
  [[175, 162],  [137, 95]], 
  [[310, 170],  [300, 72]], 
  [[413, 227],  [424, 116]]
@@ -261,6 +257,7 @@ class Simulation {
                     // if completed a lap
                     if(creature.nextCheckpoint == 1) {
                         let lapTime = self.now - creature.lapInitTime;
+                        console.log("Lap time: " + lapTime);
                         if(lapTime < this.bestLapTime) {
                             this.bestLapTime = lapTime;
                         }

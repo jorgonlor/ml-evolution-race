@@ -1,6 +1,6 @@
 /* 
  * creature.js
- * Created by Jorge Gonzalez, December, 20, 2018.
+ * Created by Jorge Gonzalez, jorgonlor@gmail.com, December, 20, 2018.
  * Released under MIT License - see LICENSE file for details.
  */
 
